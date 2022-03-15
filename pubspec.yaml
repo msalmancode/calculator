@@ -30,7 +30,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_lints: ^1.0.4
   intl: ^0.17.0
-  stack: ^0.2.1
 
 dev_dependencies:
   flutter_test:

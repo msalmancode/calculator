@@ -1,9 +1,28 @@
 import 'package:calculator/utils/buttons.dart';
-import 'package:stack/stack.dart';
 
-class EvaluateString {
+class Calculation {
   static num evaluate(String expression) {
+    expression = expression.replaceAll('-', SubButton);
+
+    // To Solve Negation
     final tokens = expression.split('');
+    for (int x = 1; x < tokens.length; x++) {
+      if (!isNumber(tokens[x])) {
+        final current = tokens[x];
+        final last = tokens[x - 1];
+
+        if ((current == SubButton || current == AddButton) &&
+            ((last == SubButton || last == AddButton))) {
+          if (current == last) {
+            tokens[x] = AddButton;
+            tokens.removeAt(x - 1);
+          } else {
+            tokens[x] = SubButton;
+            tokens.removeAt(x - 1);
+          }
+        }
+      }
+    }
 
     // Stack for numbers: 'values'
     Stack<num> values = new Stack<num>();
@@ -17,30 +36,28 @@ class EvaluateString {
       if (isNumber(tokens[i])) {
         StringBuffer sbuf = StringBuffer();
 
-        // There may be more than one
-        // digits in number
-        while (i < tokens.length && isNumber(tokens[i]))
+        while (i < tokens.length && isNumber(tokens[i])) {
           sbuf.write(tokens[i++]);
+        }
         values.push(num.parse(sbuf.toString()));
 
         i--;
-      }
-
-      // Current token is an operator.
-      else if (tokens[i] == AddButton ||
+      } else if (tokens[i] == AddButton ||
           tokens[i] == SubButton ||
           tokens[i] == MulButton ||
           tokens[i] == DivideButton) {
-        while (ops.isNotEmpty && hasPrecedence(tokens[i], ops.top()))
+        while (ops.isNotEmpty && hasPrecedence(tokens[i], ops.top)) {
           values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+        }
 
         // Push current token to 'ops'.
         ops.push(tokens[i]);
       }
     }
 
-    while (ops.isNotEmpty)
+    while (ops.isNotEmpty) {
       values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+    }
 
     // Top of 'values' contains
     // result, return it
@@ -57,18 +74,29 @@ class EvaluateString {
       if (value == DotButton) {
         return true;
       }
-      final convertInt = int.parse(value);
-
-      if (convertInt >= 0 && convertInt <= 9) {
+      if (int.parse(value) >= 0 && int.parse(value) <= 9) {
         return true;
       }
+
       return false;
     }
   }
 
-  static bool hasPrecedence(String op1, String op2) {
-    if ((op1 == MulButton || op1 == DivideButton) &&
-        (op2 == AddButton || op2 == SubButton))
+  static bool isOperator(String value) {
+    if (value == AddButton ||
+        value == SubButton ||
+        value == MulButton ||
+        value == DivideButton) {
+      return true;
+    } else {
+      return true;
+    }
+  }
+
+  static bool hasPrecedence(String currentValue, String topValue) {
+    // debugger();
+    if (((currentValue == MulButton || currentValue == DivideButton) &&
+        (topValue == AddButton || topValue == SubButton)))
       return false;
     else
       return true;
@@ -88,4 +116,20 @@ class EvaluateString {
     }
     return 0;
   }
+}
+
+class Stack<T> {
+  final _list = <T>[];
+
+  void push(T value) => _list.add(value);
+
+  T pop() => _list.removeLast();
+
+  T get top => _list.last;
+
+  bool get isEmpty => _list.isEmpty;
+  bool get isNotEmpty => _list.isNotEmpty;
+
+  @override
+  String toString() => _list.toString();
 }
