@@ -1,4 +1,5 @@
 import 'package:calculator/utils/buttons.dart';
+import 'package:calculator/utils/stack.dart';
 
 class Calculation {
   static num evaluate(String expression) {
@@ -94,7 +95,6 @@ class Calculation {
   }
 
   static bool hasPrecedence(String currentValue, String topValue) {
-    // debugger();
     if (((currentValue == MulButton || currentValue == DivideButton) &&
         (topValue == AddButton || topValue == SubButton)))
       return false;
@@ -116,20 +116,4 @@ class Calculation {
     }
     return 0;
   }
-}
-
-class Stack<T> {
-  final _list = <T>[];
-
-  void push(T value) => _list.add(value);
-
-  T pop() => _list.removeLast();
-
-  T get top => _list.last;
-
-  bool get isEmpty => _list.isEmpty;
-  bool get isNotEmpty => _list.isNotEmpty;
-
-  @override
-  String toString() => _list.toString();
 }
