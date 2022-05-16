@@ -38,7 +38,7 @@ class ResultScreen extends StatelessWidget {
                     result, //formatToThousand(result),
                     style: TextStyle(
                       fontSize: getScreenHeight(context) * 0.10,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w200,
                       color: errorText.length == 0
                           ? (isDarkMode ? kTextColorLight : kTextColorDark)
                           : Colors.red,

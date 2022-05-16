@@ -14,7 +14,7 @@ class SnappingSheetTop extends StatelessWidget {
         positionFactor: 1.0,
       ),
       child: body,
-      grabbingHeight: 200,
+      grabbingHeight: 150,
       grabbing: Container(color: Colors.transparent),
       sheetAbove: SnappingSheetContent(
         draggable: true,
